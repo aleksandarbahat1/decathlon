@@ -1,0 +1,1515 @@
+\documentclass[11pt]{article}
+
+    \usepackage{ebgaramond}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{\vspace{-0.3in}Trends in the Olympic Decathlon: Data Collection\vspace{-0.1in}}
+    \author{Aleksandar Bahat}
+    \date{\vspace{-0.3in}}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+
+\begin{center}\rule{\linewidth}{0.5pt}\end{center}
+
+    \hypertarget{introduction}{%
+\section*{Introduction}\label{introduction}}
+
+    The decathlon is track and field's ten-part ``combined'' event. It
+consists of:
+\begin{itemize}
+\item the 100m, long jump, shot put, high jump, and 400m on the
+first day of competition, and
+\item the 110m hurdles, discus throw, pole
+vault, javelin throw, and 1500m on the second day.
+\end{itemize}
+
+    Each event is scored according to a standardized formula, and ranks are
+determined by total points across all ten events.
+
+    The decathlon has been a part of every modern Summer Olympics since they
+began in 1912. Because there's so much quantitative data associated with
+it --- that's 25 Olympics, every one with dozens of decathletes, each of
+whom generates 10 times, distances, and heights, \emph{and} 10 scores to
+match --- it's a data analyst's dream! Its complexity invites many
+questions, such as:
+\begin{itemize}
+\item Do Olympic decathletes tend to favor certain
+events? Put another way, where should decathletes focus their training?
+Does the current scoring system fairly balance running, jumping, and
+throwing?
+\item Do Olympic decathletes tend towards a certain body type? A
+certain age?
+\item How do the winners and medalists differ from the rest of
+the competitors?
+\item How have the answers to those questions changed over
+time? Have Olympic decathletes gotten better at hurdling? Worse at shot
+putting? Taller? Slimmer? And so on.
+\end{itemize}
+
+    This notebook contains the first half of this project, the data
+collection. The data we need is extensive and spread across many
+different webpages, so better to automate the scraping rather than
+copying and pasting tables manually. In the next notebook we'll do the
+analysis.
+
+    Our primary source is
+\href{https://www.olympedia.org/event_names/93}{the decathlon page} on
+\href{https://www.olympedia.org}{Olympedia.org}, a thorough archive of
+Olympic results and athlete biographies. However, it's not quite
+complete: it includes the overall results from the Tokyo 2020 decathlon,
+but not the results for each of its constituent events. So we get that
+data from
+\href{https://en.wikipedia.org/wiki/Athletics_at_the_2020_Summer_Olympics_–_Men\%27s_decathlon}{the
+relevant Wikipedia page} instead.
+
+    For each Olympic year except 2020, we'll create an ``overall''
+DataFrame, a ``biographical'' DataFrame, and an ``events'' DataFrame.
+Then we'll combine those three DataFrames into one. All of those
+DataFrames will be indexed by athlete. To finish, we'll combine the
+DataFrames from every year (including one for 2020, created separately)
+into one multi-indexed DataFrame, with year as the primary index and
+athlete as the secondary index. This master DataFrame gets exported to a
+CSV file. Numerous local corrections are required along the way, since
+the data is often formatted inconsistently or contains errors.
+
+    \hypertarget{libraries}{%
+\section*{Libraries}\label{libraries}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{requests}
+\PY{k+kn}{from} \PY{n+nn}{bs4} \PY{k+kn}{import} \PY{n}{BeautifulSoup}
+\PY{k+kn}{import} \PY{n+nn}{functools}
+\PY{k+kn}{from} \PY{n+nn}{decimal} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{datetime} \PY{k+kn}{import} \PY{n}{datetime}\PY{p}{,} \PY{n}{timedelta}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{navigating-within-and-between-the-relevant-webpages}{%
+\section*{Navigating within and between the relevant
+webpages}\label{navigating-within-and-between-the-relevant-webpages}}
+
+    There are three HTML elements on the Olympedia webpages we need to find:
+\begin{itemize}
+\item ``striped'' tables,
+\item tables of class ``biodata'',
+\item drop-down menus
+with the name ``Parts'' and ID ``runs''.
+\end{itemize}
+
+    The three functions below take a URL (as a string) and return the first
+occurrence of each such element at that URL (as a BeautifulSoup Tag
+object).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{striped\PYZus{}table}\PY{p}{(}\PY{n}{url}\PY{p}{)}\PY{p}{:}
+    \PY{n}{response} \PY{o}{=} \PY{n}{requests}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{url}\PY{p}{)}
+    \PY{n}{soup} \PY{o}{=} \PY{n}{BeautifulSoup}\PY{p}{(}\PY{n}{response}\PY{o}{.}\PY{n}{text}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{html.parser}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{table} \PY{o}{=} \PY{n}{soup}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{table}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{class}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{table table\PYZhy{}striped}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{table}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{biodata\PYZus{}table}\PY{p}{(}\PY{n}{url}\PY{p}{)}\PY{p}{:}
+    \PY{n}{response} \PY{o}{=} \PY{n}{requests}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{url}\PY{p}{)}
+    \PY{n}{soup} \PY{o}{=} \PY{n}{BeautifulSoup}\PY{p}{(}\PY{n}{response}\PY{o}{.}\PY{n}{text}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{html.parser}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{table} \PY{o}{=} \PY{n}{soup}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{table}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{class}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{biodata}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{table}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{parts\PYZus{}menu}\PY{p}{(}\PY{n}{url}\PY{p}{)}\PY{p}{:}
+    \PY{n}{response} \PY{o}{=} \PY{n}{requests}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{url}\PY{p}{)}
+    \PY{n}{soup} \PY{o}{=} \PY{n}{BeautifulSoup}\PY{p}{(}\PY{n}{response}\PY{o}{.}\PY{n}{text}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{html.parser}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{menus} \PY{o}{=} \PY{n}{soup}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{select}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{menu} \PY{o+ow}{in} \PY{n}{menus}\PY{p}{:}
+        \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{runs}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{menu}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+            \PY{k}{return} \PY{n}{menu}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We also need to find the URLs of relevant subpages, starting from the
+\href{https://www.olympedia.org/event_names/93}{top-level decathlon
+page} cited in the Introduction. Note that we memoize these functions to
+reduce runtime; this becomes essential later when we need to find and
+read from very many webpages to create the DataFrames.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{URL\PYZus{}PREFIX} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://www.olympedia.org}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{URL\PYZus{}TOP} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://www.olympedia.org/event\PYZus{}names/93}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{overall\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{striped\PYZus{}table}\PY{p}{(}\PY{n}{URL\PYZus{}TOP}\PY{p}{)}
+    \PY{n}{rows} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{rows}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+        \PY{n}{row\PYZus{}data} \PY{o}{=} \PY{n}{row}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{td}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{if} \PY{n}{row\PYZus{}data}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{text} \PY{o}{==} \PY{n}{year}\PY{p}{:}
+            \PY{n}{rel\PYZus{}url} \PY{o}{=} \PY{n}{row\PYZus{}data}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{href}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+            \PY{k}{return} \PY{n}{URL\PYZus{}PREFIX} \PY{o}{+} \PY{n}{rel\PYZus{}url}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{bio\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{athlete}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{striped\PYZus{}table}\PY{p}{(}\PY{n}{overall\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{)}
+    \PY{n}{rows} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{rows}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+        \PY{n}{row\PYZus{}data} \PY{o}{=} \PY{n}{row}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{td}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{if} \PY{n}{row\PYZus{}data}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{text}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)} \PY{o}{==} \PY{n}{athlete}\PY{p}{:}
+            \PY{n}{rel\PYZus{}url} \PY{o}{=} \PY{n}{row\PYZus{}data}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{href}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+            \PY{k}{return} \PY{n}{URL\PYZus{}PREFIX} \PY{o}{+} \PY{n}{rel\PYZus{}url}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{event\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{:}
+    \PY{n}{menu} \PY{o}{=} \PY{n}{parts\PYZus{}menu}\PY{p}{(}\PY{n}{overall\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{)}
+    \PY{n}{options} \PY{o}{=} \PY{n}{menu}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{option}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{option} \PY{o+ow}{in} \PY{n}{options}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+        \PY{k}{if} \PY{n}{option}\PY{o}{.}\PY{n}{text} \PY{o}{==} \PY{n}{event}\PY{p}{:}
+            \PY{n}{rel\PYZus{}url} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/results/}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{option}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+            \PY{k}{return} \PY{n}{URL\PYZus{}PREFIX} \PY{o}{+} \PY{n}{rel\PYZus{}url}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{the-overall-data}{%
+\section*{The overall data}\label{the-overall-data}}
+
+    Here we collect data from the subpages given by the
+\texttt{overall\_url} function. For an example, see the
+\href{https://www.olympedia.org/results/358863}{overall page for the
+2016 decathlon}. The desired attributes are the athletes' overall ranks,
+overall points, and nationalities. Sometimes the results for the
+constituent events are also included on these subpages, but not always;
+because of this lack of consistency, it's easier to collect that data
+separately.
+
+    The decathlon's scoring system changed a few times during the 20th
+century. Since we want to compare performances across time, we'll use
+the modern scoring system (first implemented in 1985) for everything.
+Some earlier Olympics have both hand-timed and automatically-timed
+results for the running events; we always choose the automatic times.
+
+    All the numerical data we collect will be represented with the Decimal
+type, as the inexactness of floating point arithmetic causes problems
+with the score calculations later on. For our purposes, the performance
+disadvantage compared to using the float type is not significant.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{d}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{try}\PY{p}{:}
+        \PY{k}{return} \PY{n}{Decimal}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+    \PY{k}{except}\PY{p}{:}
+        \PY{k}{return} \PY{n}{Decimal}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NaN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Some of the country codes in the data no longer exist. Since we'll want
+to visualize the geographic distribution of participants, medalists,
+etc. later on, we replace those country codes with their modern
+equivalents. The mapping from old to new codes was created manually by
+looking up the nationalities of the 61 competitors whose original states
+no longer exist, and is stored in the \texttt{old\_to\_new\_IOC.csv}
+file.
+
+    We also need to convert IOC country codes to the more common 3-letter
+ISO codes. The mapping in the file \texttt{IOC\_to\_ISO.csv} comes from
+the table at WorldData.info
+\href{https://www.worlddata.info/countrycodes.php}{here}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{old\PYZus{}to\PYZus{}new\PYZus{}IOC}\PY{p}{(}\PY{n}{old\PYZus{}ioc}\PY{p}{,} \PY{n}{athlete}\PY{p}{)}\PY{p}{:}
+    \PY{n}{D} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}to\PYZus{}new\PYZus{}IOC.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{k}{try}\PY{p}{:} 
+        \PY{k}{return} \PY{n}{D}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{p}{(}\PY{n}{old\PYZus{}ioc}\PY{p}{,} \PY{n}{athlete}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{New IOC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{k}{except}\PY{p}{:}
+        \PY{k}{return} \PY{n}{old\PYZus{}ioc}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{IOC\PYZus{}to\PYZus{}ISO}\PY{p}{(}\PY{n}{ioc}\PY{p}{)}\PY{p}{:}
+    \PY{n}{D} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IOC\PYZus{}to\PYZus{}ISO.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{k}{return} \PY{n}{D}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{ioc}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ISO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now we can assemble the overall data for a given year.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{overall\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{striped\PYZus{}table}\PY{p}{(}\PY{n}{overall\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{)}
+    \PY{n}{unfiltered\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}html}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{table}\PY{p}{)}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{points\PYZus{}type} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ (1985 Auto Tables)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ (1985 Hand Tables)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Points}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{points\PYZus{}type} \PY{o+ow}{in} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+            \PY{n}{points} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Points}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{points\PYZus{}type}
+            \PY{k}{break}
+    \PY{k}{if} \PY{n}{year} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1972}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}    \PY{c+c1}{\PYZsh{} 1972 auto\PYZhy{}time scores on Olympedia are mislabeled}
+        \PY{n}{points} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Points (1985 Hand Tables)}\PY{l+s+s1}{\PYZsq{}}
+    \PY{n}{cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{points}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NOC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{reindex}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n}{cols}\PY{p}{)}
+    
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{=}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{regex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}    \PY{c+c1}{\PYZsh{} Removes \PYZsq{}=\PYZsq{} from tied ranks}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                \PY{n}{points}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NOC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{d}\PY{p}{)}
+        \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+        
+    \PY{k}{if} \PY{n}{year} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1920}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}    \PY{c+c1}{\PYZsh{} One row of the 1920 data is entirely empty}
+        \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{)}
+    \PY{k}{if} \PY{n}{year} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1968}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}    \PY{c+c1}{\PYZsh{} Some 1968 scores on Olympedia are 1 point too low}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wu Ah\PYZhy{}Min}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{7155}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Franz Biedermann}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{6221}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{p}{)}   \PY{c+c1}{\PYZsh{} \PYZsq{}Athlete\PYZsq{} column to be an argument of new\PYZus{}NOC}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{old\PYZus{}to\PYZus{}new\PYZus{}IOC}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{Country}\PY{p}{,} \PY{n}{x}\PY{o}{.}\PY{n}{Athlete}\PY{p}{)}\PY{p}{,}
+                                 \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{IOC\PYZus{}to\PYZus{}ISO}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Let's test the \texttt{overall\_data} function for the year 2016.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{overall\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              Overall Rank Overall Points Country
+Athlete
+Ashton Eaton             1           8893     USA
+Kévin Mayer              2           8834     FRA
+Damian Warner            3           8666     CAN
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{the-biographical-data}{%
+\section*{The biographical data}\label{the-biographical-data}}
+
+    Here we collect data from the subpages given by the \texttt{bio\_url}
+function. For an example, see the
+\href{https://www.olympedia.org/athletes/126672}{biography page for
+Ashton Eaton}. The desired attributes are the athletes' heights,
+weights, and ages at the given Olympics. Because of how the data is
+formatted, we need a few auxiliary functions to obtain this information.
+
+    First, we need a way of extracting an athlete's birth date from the
+webpage. The birth date is embedded in a table entry whose form is
+usually, but not always, ``{[}day{]} {[}month{]} {[}year{]} in {[}birth
+place{]}''. Sometimes the day is missing, sometimes the day and the
+month are both missing, in one instance the phrase includes the word
+``circa'' because the precise year is unknown, and sometimes no birth
+date is listed at all.
+\begin{itemize}
+\item If the birth day is missing but the month and year are known, we set the day to the 16th, halfway through the month.
+\item If the birth month is missing but the year is known, we set the day and month to the 2nd of July, halfway through the year.
+\item If an approximate year is known (the ``circa'' case), we treat it as the exact year and then do the same thing as above.
+\end{itemize}
+
+    There are few enough exceptions of this kind that no general age trends
+will be obscured by these minor approximations.
+
+    The \texttt{extract\_date} function takes a string as input and returns
+a datetime object as output.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{extract\PYZus{}date}\PY{p}{(}\PY{n}{date\PYZus{}in\PYZus{}place}\PY{p}{)}\PY{p}{:}
+    \PY{n}{date} \PY{o}{=} \PY{n}{date\PYZus{}in\PYZus{}place}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ in }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{date\PYZus{}format} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{B }\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}
+    
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{circa}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{date}\PY{p}{:}
+        \PY{n}{date} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{p}{[}\PY{n}{d} \PY{k}{for} \PY{n}{d} \PY{o+ow}{in} \PY{n}{date} \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{isdigit}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+    \PY{k}{if} \PY{n}{date}\PY{o}{.}\PY{n}{isnumeric}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{date} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2 July }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{date}
+        
+    \PY{k}{if} \PY{n}{date}\PY{o}{.}\PY{n}{isalpha}\PY{p}{(}\PY{p}{)} \PY{o+ow}{or} \PY{o+ow}{not} \PY{n}{date}\PY{p}{:}
+        \PY{k}{return} \PY{n}{pd}\PY{o}{.}\PY{n}{NaT}
+    \PY{k}{try}\PY{p}{:}
+        \PY{k}{return} \PY{n}{datetime}\PY{o}{.}\PY{n}{strptime}\PY{p}{(}\PY{n}{date}\PY{p}{,} \PY{n}{date\PYZus{}format}\PY{p}{)}
+    \PY{k}{except}\PY{p}{:}
+        \PY{k}{return} \PY{n}{datetime}\PY{o}{.}\PY{n}{strptime}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16 }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{date}\PY{p}{,} \PY{n}{date\PYZus{}format}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We also need to know the start date of the Olympic decathlon in each
+year.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{oly\PYZus{}date}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{biodata\PYZus{}table}\PY{p}{(}\PY{n}{overall\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{)}
+    \PY{n}{rows} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{find\PYZus{}all}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{for} \PY{n}{row} \PY{o+ow}{in} \PY{n}{rows}\PY{p}{:}
+        \PY{n}{row\PYZus{}header} \PY{o}{=} \PY{n}{row}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{th}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{if} \PY{n}{row\PYZus{}header}\PY{o}{.}\PY{n}{text} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+            \PY{n}{dates} \PY{o}{=} \PY{n}{row}\PY{o}{.}\PY{n}{find}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{td}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{text}
+            
+    \PY{n}{start\PYZus{}day} \PY{o}{=} \PY{n+nb}{next}\PY{p}{(}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{dates}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{isdigit}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{n}{start\PYZus{}month} \PY{o}{=} \PY{n+nb}{next}\PY{p}{(}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{dates}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{isalpha}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{n}{year} \PY{o}{=} \PY{n+nb}{next}\PY{p}{(}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n+nb}{reversed}\PY{p}{(}\PY{n}{dates}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{isdigit}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{n}{date} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{p}{[}\PY{n}{start\PYZus{}day}\PY{p}{,} \PY{n}{start\PYZus{}month}\PY{p}{,} \PY{n}{year}\PY{p}{]}\PY{p}{)}
+    \PY{n}{date\PYZus{}format} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{B }\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}
+    
+    \PY{k}{return} \PY{n}{datetime}\PY{o}{.}\PY{n}{strptime}\PY{p}{(}\PY{n}{date}\PY{p}{,} \PY{n}{date\PYZus{}format}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Calculating age (in years, as a Decimal rounded to the nearest
+hundredth) from two datetime objects is a simple subtraction.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{age}\PY{p}{(}\PY{n}{birth\PYZus{}date}\PY{p}{,} \PY{n}{current\PYZus{}date}\PY{p}{)}\PY{p}{:}
+    \PY{n}{age\PYZus{}in\PYZus{}days} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{p}{(}\PY{n}{current\PYZus{}date} \PY{o}{\PYZhy{}} \PY{n}{birth\PYZus{}date}\PY{p}{)}\PY{o}{.}\PY{n}{days}\PY{p}{)}
+    \PY{n}{age} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{n}{age\PYZus{}in\PYZus{}days} \PY{o}{/} \PY{n}{d}\PY{p}{(}\PY{l+m+mf}{365.25}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}    \PY{c+c1}{\PYZsh{} Ignores leap years}
+    \PY{k}{return} \PY{n}{age}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We also need to be able to extract heights and weights from table
+entries of the form ``{[}height{]} / {[}weight{]}''. Sometimes one of
+the measurements is missing. For at least one athlete, the weight is
+given as a range, in which case we return the middle of the range. All
+heights and weights in the archive are in cm and kg, respectively, so
+again we omit units. These functions both return Decimals rounded to the
+nearest integer.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{extract\PYZus{}height}\PY{p}{(}\PY{n}{height\PYZus{}and\PYZus{}weight}\PY{p}{)}\PY{p}{:}
+    \PY{n}{height} \PY{o}{=} \PY{n}{height\PYZus{}and\PYZus{}weight}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ cm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{height} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{n}{height}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{height}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{extract\PYZus{}weight}\PY{p}{(}\PY{n}{height\PYZus{}and\PYZus{}weight}\PY{p}{)}\PY{p}{:}
+    \PY{n}{weight} \PY{o}{=} \PY{n}{height\PYZus{}and\PYZus{}weight}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ / }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ kg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{weight}\PY{p}{:}
+        \PY{n}{low\PYZus{}weight} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{n}{weight}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n}{high\PYZus{}weight} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{n}{weight}\PY{o}{.}\PY{n}{partition}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+        \PY{n}{weight} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{p}{(}\PY{n}{low\PYZus{}weight} \PY{o}{+} \PY{n}{high\PYZus{}weight}\PY{p}{)} \PY{o}{/} \PY{n}{d}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{weight} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{n}{weight}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{weight}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Finally, we need a list of all the athletes competing in a given year's
+decathlon.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{athletes}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n+nb}{list}\PY{p}{(}\PY{n}{overall\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{o}{.}\PY{n}{index}\PY{p}{)} \PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n+nb}{str}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now we can assemble the biographical data for a given year, first for
+one athlete, then for all the year's athletes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{bio\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{athlete}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{biodata\PYZus{}table}\PY{p}{(}\PY{n}{bio\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{athlete}\PY{p}{)}\PY{p}{)}
+    \PY{n}{unfiltered\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}html}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{table}\PY{p}{)}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{n}{unfiltered\PYZus{}data} \PY{o}{=} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{T}
+    \PY{n}{cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Born}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Measurements}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{reindex}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n}{cols}\PY{p}{,} \PY{n}{fill\PYZus{}value}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+    \PY{n}{birth\PYZus{}date} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Born}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{extract\PYZus{}date}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{birth\PYZus{}date}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{age}\PY{p}{,} \PY{n}{current\PYZus{}date}\PY{o}{=}\PY{n}{oly\PYZus{}date}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Height}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Measurements}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{extract\PYZus{}height}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Weight}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Measurements}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{extract\PYZus{}weight}\PY{p}{)}
+    
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Born}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Measurements}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{rename\PYZus{}axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{index}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+m+mi}{1}\PY{p}{:}\PY{n}{athlete}\PY{p}{\PYZcb{}}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{bios\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{frames} \PY{o}{=} \PY{p}{[}\PY{n}{bio\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{athlete}\PY{p}{)} \PY{k}{for} \PY{n}{athlete} \PY{o+ow}{in} \PY{n}{athletes}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{]}
+    \PY{k}{return} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{frames}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Testing the \texttt{bio\_data} and \texttt{bios\_data} functions for the
+year 2016:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{bio\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ashton Eaton}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                Age Height Weight
+Athlete
+Ashton Eaton  28.57    186     81
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{bios\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                 Age Height Weight
+Athlete
+Ashton Eaton   28.57    186     81
+Kévin Mayer    24.52    186     77
+Damian Warner  26.78    185     83
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{the-events-data}{%
+\section*{The events data}\label{the-events-data}}
+
+    Here we collect data from the subpages given by the \texttt{event\_url}
+function. For an example, see the
+\href{http://www.olympedia.org/results/358864}{event page for the 2016
+decathlon 100m}. The desired attributes are the athletes' results
+(times, distances, or heights), ranks, and scores in the given event. As
+with the biographical data, we need a couple of auxiliary functions.
+
+    Times for the 1500m are given in the usual
+``{[}minutes{]}:{[}seconds{]}'' format. For ease of calculation and
+consistency with the other running events, we'll use the following
+function to convert these times to seconds, taking a string as input and
+returning a Decimal as output. (Times from the 400m occur both in
+seconds and in the ``{[}minutes{]}:{[}seconds{]}'' format, hence the
+``if'' statement.)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{extract\PYZus{}seconds}\PY{p}{(}\PY{n}{time}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{time}\PY{p}{)} \PY{o}{==} \PY{n+nb}{float} \PY{o+ow}{or} \PY{n}{time}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{isdigit}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{sec} \PY{o}{=} \PY{n}{time}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{sec} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}timedelta}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{00:0}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{time}\PY{p}{,} \PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{total\PYZus{}seconds}\PY{p}{(}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n+nb}{round}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{n}{sec}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    A few of the long jump distances have a ``w'' suffix to indicate that
+the jump was wind-aided: jumps with a \textgreater2.0 m/s tailwind can't
+be counted as records, though they are still valid within a given
+decathlon competition. Wind-aided jumps are rare enough that it will not
+cause confusion to simply drop the ``w'' when it occurs.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{remove\PYZus{}w}\PY{p}{(}\PY{n}{distance}\PY{p}{)}\PY{p}{:}
+    \PY{k}{try}\PY{p}{:}
+        \PY{k}{return} \PY{n}{distance}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{except}\PY{p}{:}
+        \PY{k}{return} \PY{n}{distance}
+\end{Verbatim}
+\end{tcolorbox}
+
+    In order to make historical comparisons, we need to use a single scoring
+system for all Olympic years. Naturally, we choose the modern scoring
+system. Although event scores \emph{are} included on these subpages,
+these are the scores according to the scoring system \emph{during that
+year}, not necessarily the modern one. So we calculate the scores
+ourselves, using the raw results (times, distances, heights) along with
+the modern scoring formulas implemented below. The formula parameters a,
+b, and c are set by the governing body World Athletics; see
+\href{https://worldathletics.org/about-iaaf/documents/technical-information}{here}
+for details.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{events} \PY{o}{=} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Long Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+          \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Shot Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+          \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+          \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discus Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pole Vault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+          \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Javelin Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1,500 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{runs} \PY{o}{=} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1,500 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{jumps} \PY{o}{=} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Long Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pole Vault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{throws} \PY{o}{=} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Shot Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discus Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Javelin Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{points}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{:}
+    \PY{n}{SP} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scoring\PYZus{}parameters.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                 \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+                 \PY{n}{converters}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{d}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{d}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{d}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{n}{a} \PY{o}{=} \PY{n}{SP}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
+    \PY{n}{b} \PY{o}{=} \PY{n}{SP}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
+    \PY{n}{c} \PY{o}{=} \PY{n}{SP}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}
+    
+    \PY{n}{x} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{quantize}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.01}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{rounding}\PY{o}{=}\PY{n}{ROUND\PYZus{}DOWN}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{is\PYZus{}nan}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NaN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{n}{runs}\PY{p}{:}
+        \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{compare}\PY{p}{(}\PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]}\PY{p}{)} \PY{o}{==} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{a}\PY{p}{[}\PY{n}{event}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{c}\PY{p}{[}\PY{n}{event}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{n}{jumps}\PY{p}{:}
+        \PY{k}{if} \PY{p}{(}\PY{n}{x}\PY{o}{*}\PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{compare}\PY{p}{(}\PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]}\PY{p}{)} \PY{o}{==} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{a}\PY{p}{[}\PY{n}{event}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{x}\PY{o}{*}\PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{c}\PY{p}{[}\PY{n}{event}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{n}{throws}\PY{p}{:}
+        \PY{k}{if} \PY{n}{x}\PY{o}{.}\PY{n}{compare}\PY{p}{(}\PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]}\PY{p}{)} \PY{o}{==} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{a}\PY{p}{[}\PY{n}{event}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{b}\PY{p}{[}\PY{n}{event}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{c}\PY{p}{[}\PY{n}{event}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{p} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{p} \PY{o}{=} \PY{n}{p}\PY{o}{.}\PY{n}{quantize}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{rounding}\PY{o}{=}\PY{n}{ROUND\PYZus{}DOWN}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{p}
+\end{Verbatim}
+\end{tcolorbox}
+
+    To distinguish between hand times and automatic times, we define a
+``precision'' function to keep track of the number of decimal places in
+the reported results for each event and year. Hand times are always
+reported to the nearest 0.1 seconds, while automatic times are always
+reported to the nearest 0.01 seconds. While distances and heights are
+almost always reported to the nearest centimeter, distances were
+reported to the nearest millimeter in some early Olympics.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{precision}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{:}
+    \PY{n}{year} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{year}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1964}\PY{p}{,}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Long Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Long Jump Distance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{3} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1920}\PY{p}{,} \PY{l+m+mi}{1924}\PY{p}{,} \PY{l+m+mi}{1948}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Shot Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Shot Put Distance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{3} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1924}\PY{p}{,}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High Jump Height}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1960}\PY{p}{,} \PY{l+m+mi}{1964}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1964}\PY{p}{,}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discus Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discus Throw Distance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{3} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1920}\PY{p}{,} \PY{l+m+mi}{1924}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pole Vault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pole Vault Height}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Javelin Throw}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Javelin Throw Distance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{3} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1920}\PY{p}{,} \PY{l+m+mi}{1924}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1,500 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1,500 metres Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{1} \PY{k}{if} \PY{p}{(}\PY{n}{year} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n}{year} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1960}\PY{p}{,} \PY{l+m+mi}{1964}\PY{p}{,} \PY{l+m+mi}{1972}\PY{p}{,} \PY{l+m+mi}{1980}\PY{p}{)}\PY{p}{)} \PY{k}{else} \PY{l+m+mi}{2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now we can assemble the event data for a given year, first for one
+event, then for all the year's events. We always use automatically-timed
+results for the running events when available; up to 1948, the running
+results were only hand-timed. In order to calculate the scores correctly
+according to the modern system, we must add 0.24 seconds to hand-timed
+100m and 110m results, and 0.14 seconds to hand-timed 400m results.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{event\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{:}
+    \PY{n}{table} \PY{o}{=} \PY{n}{striped\PYZus{}table}\PY{p}{(}\PY{n}{event\PYZus{}url}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{)}
+    \PY{n}{unfiltered\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}html}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{table}\PY{p}{)}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{results\PYZus{}type} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{T(A)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{T(H)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distance}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BHC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{results\PYZus{}type} \PY{o+ow}{in} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+            \PY{n}{results} \PY{o}{=} \PY{n}{results\PYZus{}type}
+            \PY{k}{break}
+    \PY{n}{cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{results}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{unfiltered\PYZus{}data}\PY{o}{.}\PY{n}{reindex}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n}{cols}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Long Jump}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{remove\PYZus{}w}\PY{p}{)}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1,500 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{extract\PYZus{}seconds}\PY{p}{)}
+    
+    \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{d}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{n}{precision}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+    
+    \PY{n}{auto\PYZus{}results} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{results}\PY{p}{]}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n+nb}{int}\PY{p}{(}\PY{n}{year}\PY{p}{)} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n+nb}{int}\PY{p}{(}\PY{n}{year}\PY{p}{)} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1964}\PY{p}{,}\PY{p}{)}\PY{p}{:}
+            \PY{n}{auto\PYZus{}results} \PY{o}{=} \PY{n}{auto\PYZus{}results} \PY{o}{+} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0.24}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{if} \PY{n}{event} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{400 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n+nb}{int}\PY{p}{(}\PY{n}{year}\PY{p}{)} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1948} \PY{o+ow}{or} \PY{n+nb}{int}\PY{p}{(}\PY{n}{year}\PY{p}{)} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1960}\PY{p}{,} \PY{l+m+mi}{1964}\PY{p}{)}\PY{p}{:}
+            \PY{n}{auto\PYZus{}results} \PY{o}{=} \PY{n}{auto\PYZus{}results} \PY{o}{+} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0.14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{auto\PYZus{}results}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{points}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{n}{event}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{=}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{regex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{regex}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}    \PY{c+c1}{\PYZsh{} Removes null results}
+    \PY{n}{renamed\PYZus{}results} \PY{o}{=} \PY{n}{results}
+    \PY{k}{if} \PY{n}{results} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{T(A)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{T(H)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{renamed\PYZus{}results} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}
+    \PY{k}{if} \PY{n}{results} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BHC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}    \PY{c+c1}{\PYZsh{} \PYZsq{}BHC\PYZsq{} means \PYZsq{}best height cleared\PYZsq{}}
+        \PY{n}{renamed\PYZus{}results} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Height}\PY{l+s+s1}{\PYZsq{}}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                \PY{n}{results}\PY{p}{:}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{renamed\PYZus{}results}\PY{p}{\PYZcb{}}\PY{p}{)}
+    
+    \PY{n}{data}\PY{p}{[}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{d}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Some 1952 hurdles results have no automatic times, only hand times}
+    \PY{k}{if} \PY{n}{year} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1952}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{event} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{110 metres Hurdles}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ignace Heinrich}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Brígido Iriarte}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.6}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Reynaldo Oliver}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.7}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Eeles Landström}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{17.1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ignace Heinrich}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.24}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Brígido Iriarte}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.84}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Reynaldo Oliver}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{16.94}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event}\PY{p}{)}
+        \PY{n}{data}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Eeles Landström}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{points}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{17.34}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{event}\PY{p}{)}
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{events\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{frames} \PY{o}{=} \PY{p}{[}\PY{n}{event\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{,} \PY{n}{event}\PY{p}{)} \PY{k}{for} \PY{n}{event} \PY{o+ow}{in} \PY{n}{events}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{frames}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{d}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NaN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Testing the \texttt{event\_data} and \texttt{events\_data} functions for
+the year 2016:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{event\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{100 metres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              100 metres Rank 100 metres Time 100 metres Points
+Athlete
+Damian Warner               1           10.30              1023
+Ashton Eaton                2           10.46               985
+Zach Ziemek                 3           10.71               926
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{events\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              100 metres Rank 100 metres Time 100 metres Points  \textbackslash{}
+Athlete
+Damian Warner               1           10.30              1023
+Ashton Eaton                2           10.46               985
+Zach Ziemek                 3           10.71               926
+
+              Long Jump Rank Long Jump Distance Long Jump Points  \textbackslash{}
+Athlete
+Damian Warner              3               7.67              977
+Ashton Eaton               1               7.94             1045
+Zach Ziemek                9               7.49              932
+
+              Shot Put Rank Shot Put Distance Shot Put Points High Jump Rank  \textbackslash{}
+Athlete
+Damian Warner            23             13.66             708             10
+Ashton Eaton             10             14.73             773             14
+Zach Ziemek              25             13.44             694              5
+
+               {\ldots} Discus Throw Points Pole Vault Rank Pole Vault Height  \textbackslash{}
+Athlete        {\ldots}
+Damian Warner  {\ldots}                 765              15              4.70
+Ashton Eaton   {\ldots}                 777               3              5.20
+Zach Ziemek    {\ldots}                 858               3              5.20
+
+
+              Pole Vault Points Javelin Throw Rank Javelin Throw Distance  \textbackslash{}
+Athlete
+Damian Warner               819                 11                  63.19
+Ashton Eaton                972                 18                  59.77
+Zach Ziemek                 972                 15                  60.92
+
+              Javelin Throw Points 1,500 metres Rank 1,500 metres Time  \textbackslash{}
+Athlete
+Damian Warner                  786                 5            264.90
+Ashton Eaton                   734                 4            263.33
+Zach Ziemek                    752                18            282.97
+
+              1,500 metres Points
+Athlete
+Damian Warner                 778
+Ashton Eaton                  789
+Zach Ziemek                   662
+
+[3 rows x 30 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{putting-it-all-together}{%
+\section*{Putting it all together}\label{putting-it-all-together}}
+
+    Now that the component DataFrames are complete, we can combine all the
+data for a given year.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{all\PYZus{}types\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{:}
+    \PY{n}{frames} \PY{o}{=} \PY{p}{[}\PY{n}{overall\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{,} \PY{n}{bios\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{,} \PY{n}{events\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{frames}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    
+    \PY{n}{sum\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns}
+                \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Points}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x} \PY{o+ow}{and} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{k}{if} \PY{n}{year} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1952}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}    \PY{c+c1}{\PYZsh{} 1952 scores are miscalculated on Olympedia}
+        \PY{n}{col} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Points}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{o}{\PYZti{}}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Overall Rank}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,}
+                                \PY{n}{data}\PY{p}{[}\PY{n}{sum\PYZus{}cols}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{d}\PY{p}{)}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Testing the \texttt{all\_types\_data} function for the year 2016:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{all\PYZus{}types\PYZus{}data}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2016}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              Overall Rank Overall Points Country    Age Height Weight  \textbackslash{}
+Athlete
+Ashton Eaton             1           8893     USA  28.57    186     81
+Kévin Mayer              2           8834     FRA  24.52    186     77
+Damian Warner            3           8666     CAN  26.78    185     83
+
+              100 metres Rank 100 metres Time 100 metres Points  \textbackslash{}
+Athlete
+Ashton Eaton                2           10.46               985
+Kévin Mayer                 9           10.81               903
+Damian Warner               1           10.30              1023
+
+              Long Jump Rank  {\ldots} Discus Throw Points Pole Vault Rank  \textbackslash{}
+Athlete                       {\ldots}
+Ashton Eaton               1  {\ldots}                 777               3
+Kévin Mayer                5  {\ldots}                 804               1
+Damian Warner              3  {\ldots}                 765              15
+
+              Pole Vault Height Pole Vault Points Javelin Throw Rank  \textbackslash{}
+Athlete
+Ashton Eaton               5.20               972                 18
+Kévin Mayer                5.40              1035                  6
+Damian Warner              4.70               819                 11
+
+              Javelin Throw Distance Javelin Throw Points 1,500 metres Rank  \textbackslash{}
+Athlete
+Ashton Eaton                   59.77                  734                 4
+Kévin Mayer                    65.04                  814                 6
+Damian Warner                  63.19                  786                 5
+
+              1,500 metres Time 1,500 metres Points
+Athlete
+Ashton Eaton             263.33                 789
+Kévin Mayer              265.49                 774
+Damian Warner            264.90                 778
+
+[3 rows x 36 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Finally, we put the \texttt{all\_types\_data} DataFrames from every
+Olympic year together. Since the scraping functions used here are not
+applicable for the year 2020, we import the 2020 data from a CSV file
+(created manually from the results on Wikipedia).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{years} \PY{o}{=} \PY{p}{[}\PY{n+nb}{str}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1912}\PY{p}{,} \PY{l+m+mi}{2020}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)} \PY{k}{if} \PY{n}{x} \PY{o+ow}{not} \PY{o+ow}{in} \PY{p}{(}\PY{l+m+mi}{1916}\PY{p}{,} \PY{l+m+mi}{1940}\PY{p}{,} \PY{l+m+mi}{1944}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{all\PYZus{}types\PYZus{}data\PYZus{}2020}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{decathlon\PYZus{}data\PYZus{}2020.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                       \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{n}{rank\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Rank}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{n}{points\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Points}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{n}{htwt\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Height}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Weight}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{int\PYZus{}cols} \PY{o}{=} \PY{n}{rank\PYZus{}cols} \PY{o}{+} \PY{n}{points\PYZus{}cols} \PY{o}{+} \PY{n}{htwt\PYZus{}cols}
+    
+    \PY{n}{age\PYZus{}col} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    
+    \PY{n}{time\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Time}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{n}{distance\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Distance}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{n}{height\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data}\PY{o}{.}\PY{n}{columns} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ Height}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}
+    \PY{n}{results\PYZus{}cols} \PY{o}{=} \PY{n}{time\PYZus{}cols} \PY{o}{+} \PY{n}{distance\PYZus{}cols} \PY{o}{+} \PY{n}{height\PYZus{}cols}
+
+    \PY{n}{num\PYZus{}cols} \PY{o}{=} \PY{n}{int\PYZus{}cols} \PY{o}{+} \PY{n}{age\PYZus{}col} \PY{o}{+} \PY{n}{results\PYZus{}cols}
+    
+    \PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{num\PYZus{}cols}\PY{p}{:}
+        \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{d}\PY{p}{)}
+        \PY{k}{if} \PY{n}{col} \PY{o+ow}{in} \PY{n}{int\PYZus{}cols}\PY{p}{:}
+            \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+        \PY{k}{if} \PY{n}{col} \PY{o+ow}{in} \PY{n}{age\PYZus{}col}\PY{p}{:}
+            \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+        \PY{k}{if} \PY{n}{col} \PY{o+ow}{in} \PY{n}{results\PYZus{}cols}\PY{p}{:}
+            \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{round}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{n}{precision}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2020}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{col}\PY{p}{)}\PY{p}{,}\PY{p}{)}\PY{p}{)}
+            
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{p}{)}   \PY{c+c1}{\PYZsh{} \PYZsq{}Athlete\PYZsq{} column to be an argument of new\PYZus{}NOC}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{old\PYZus{}to\PYZus{}new\PYZus{}IOC}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{Country}\PY{p}{,} \PY{n}{x}\PY{o}{.}\PY{n}{Athlete}\PY{p}{)}\PY{p}{,}
+                                 \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{IOC\PYZus{}to\PYZus{}ISO}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Athlete}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nd}{@functools}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{frames} \PY{o}{=} \PY{p}{[}\PY{n}{all\PYZus{}types\PYZus{}data}\PY{p}{(}\PY{n}{year}\PY{p}{)} \PY{k}{for} \PY{n}{year} \PY{o+ow}{in} \PY{n}{years}\PY{p}{]} \PY{o}{+} \PY{p}{[}\PY{n}{all\PYZus{}types\PYZus{}data\PYZus{}2020}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+    \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{frames}\PY{p}{,} \PY{n}{keys}\PY{o}{=}\PY{n}{years} \PY{o}{+} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2020}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{export\PYZus{}decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{decathlon\PYZus{}data.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Exported!}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We conclude by executing the export, and displaying the head and tail of
+the final DataFrame for good measure:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{export\PYZus{}decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Exported!
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{display}\PY{p}{(}\PY{n}{decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\PY{n}{display}\PY{p}{(}\PY{n}{decathlon\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{tail}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+                     Overall Rank Overall Points Country    Age Height Weight  \textbackslash{}
+Year Athlete                                                                    
+1912 Jim Thorpe                 1           6564     USA  25.13    183     86   
+     Hugo Wieslander            2           5966     SWE  23.09    182     81   
+     Charles Lomberg            3           5722     SWE  25.60    182     75   
+
+                     100 metres Rank 100 metres Time 100 metres Points  \textbackslash{}
+Year Athlete                                                             
+1912 Jim Thorpe                    3            11.2               765   
+     Hugo Wieslander              13            11.8               643   
+     Charles Lomberg              13            11.8               643   
+
+                     Long Jump Rank  {\ldots} Discus Throw Points Pole Vault Rank  \textbackslash{}
+Year Athlete                         {\ldots}                                       
+1912 Jim Thorpe                   3  {\ldots}                 603               3   
+     Hugo Wieslander              8  {\ldots}                 590               8   
+     Charles Lomberg              1  {\ldots}                 571               3   
+
+                     Pole Vault Height Pole Vault Points Javelin Throw Rank  \textbackslash{}
+Year Athlete                                                                  
+1912 Jim Thorpe                   3.25               418                  4   
+     Hugo Wieslander              3.10               381                  1   
+     Charles Lomberg              3.25               418                  7   
+
+                     Javelin Throw Distance Javelin Throw Points  \textbackslash{}
+Year Athlete                                                       
+1912 Jim Thorpe                       45.70                  525   
+     Hugo Wieslander                  50.40                  595   
+     Charles Lomberg                  41.83                  469   
+
+                     1,500 metres Rank 1,500 metres Time 1,500 metres Points  
+Year Athlete                                                                  
+1912 Jim Thorpe                      1             280.1                 680  
+     Hugo Wieslander                 6             285.0                 649  
+     Charles Lomberg                12             312.2                 492  
+
+[3 rows x 36 columns]
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+                             Overall Rank Overall Points Country    Age  \textbackslash{}
+Year Athlete                                                              
+2020 Cedric Dubler                     21           7008     AUS  26.56   
+     Niklas Kaul                      NaN            NaN     DEU  23.48   
+     Thomas Van der Plaetsen          NaN            NaN     BEL  30.61   
+
+
+
+
+
+                             Height Weight 100 metres Rank 100 metres Time  \textbackslash{}
+Year Athlete                                                                 
+2020 Cedric Dubler              191    NaN              13           10.89   
+     Niklas Kaul                190     90              21           11.22   
+     Thomas Van der Plaetsen    186     81              17           11.05   
+
+                             100 metres Points Long Jump Rank  {\ldots}  \textbackslash{}
+Year Athlete                                                   {\ldots}   
+2020 Cedric Dubler                         885             10  {\ldots}   
+     Niklas Kaul                           812             10  {\ldots}   
+     Thomas Van der Plaetsen               850            NaN  {\ldots}   
+
+                             Discus Throw Points Pole Vault Rank  \textbackslash{}
+Year Athlete                                                       
+2020 Cedric Dubler                           732             NaN   
+     Niklas Kaul                             NaN             NaN   
+     Thomas Van der Plaetsen                 NaN             NaN   
+
+                             Pole Vault Height Pole Vault Points  \textbackslash{}
+Year Athlete                                                       
+2020 Cedric Dubler                         NaN               NaN   
+     Niklas Kaul                           NaN               NaN   
+     Thomas Van der Plaetsen               NaN               NaN   
+
+                             Javelin Throw Rank Javelin Throw Distance  \textbackslash{}
+Year Athlete                                                             
+2020 Cedric Dubler                           13                  58.52   
+     Niklas Kaul                            NaN                    NaN   
+     Thomas Van der Plaetsen                NaN                    NaN   
+
+                             Javelin Throw Points 1,500 metres Rank  \textbackslash{}
+Year Athlete                                                          
+2020 Cedric Dubler                            716                21   
+     Niklas Kaul                              NaN               NaN   
+     Thomas Van der Plaetsen                  NaN               NaN   
+
+                             1,500 metres Time 1,500 metres Points  
+Year Athlete                                                        
+2020 Cedric Dubler                      303.69                 539  
+     Niklas Kaul                           NaN                 NaN  
+     Thomas Van der Plaetsen               NaN                 NaN  
+
+[3 rows x 36 columns]
+    \end{Verbatim}
+
+    
+    That's it for the data collection! Now the investigation can
+begin\ldots{}
+    
+    
+    
+\end{document}
